@@ -35,8 +35,39 @@ export const createParticlesGroup = (
     return group;
 };
 
-export const rule = (particlesGroup1: any[], particlesGroup2: any[], g: number) => {
+const preventLeavingScreen = (particle: any, width: number, height: number) => {
+    {
+        if (particle.x < 0) {
+            particle.x = 0; // Drop position
+            particle.vx *= -1; // Invert speed direction
+        }
+        if (particle.x > width) {
+            particle.x = width;
+            particle.vx *= -1;
+        }
+        if (particle.y < 0) {
+            particle.y = 0;
+            particle.vy *= -1;
+        }
+        if (particle.y >= height) {
+            particle.y = height;
+            particle.vy *= -1;
+        }
+    }
+};
+
+export const rule = (
+    particlesGroup1: any[],
+    particlesGroup2: any[],
+    g: number,
+    width: number,
+    height: number
+) => {
     // assume mass of particle equal to 1
+
+    // reduction coefs
+    const forceReduction = 80;
+    const velocityReduction = 0.5;
 
     for (let i = 0; i < particlesGroup1.length; i++) {
         let fx = 0;
@@ -53,10 +84,11 @@ export const rule = (particlesGroup1: any[], particlesGroup2: any[], g: number) 
             let d = Math.sqrt(dx * dx + dy * dy);
 
             // Force
-            // Gravity force = G * (m1*m2 / distance)
+            // ---
+            // Gravity force = G * (m1*m2 / distance**2)
             // m1, m2 == 1, so:
             // F = G*(1/distance)
-            if (d > 0) {
+            if (d > 0 && d < forceReduction) {
                 // assume mass equal to 1
                 let F = g * (1 / d);
                 fx += F * dx;
@@ -70,11 +102,13 @@ export const rule = (particlesGroup1: any[], particlesGroup2: any[], g: number) 
         // a = F/m
         // a = F/1
         // a = F
-        a.vx = a.vx + fx;
-        a.vy = a.vy + fy;
+        a.vx = (a.vx + fx) * velocityReduction;
+        a.vy = (a.vy + fy) * velocityReduction;
 
         // Update aplied force
-        a.x += fx;
-        a.y += fy;
+        a.x += a.vx;
+        a.y += a.vy;
+
+        preventLeavingScreen(a, width, height);
     }
 };

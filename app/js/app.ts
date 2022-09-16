@@ -7,18 +7,31 @@ const width = a.offsetWidth;
 const height = a.offsetHeight;
 
 const particles: any[] = [];
-const yellow = createParticlesGroup(7, 'yellow', particles, width, height);
-const blue = createParticlesGroup(7, 'blue', particles, width, height);
-const red = createParticlesGroup(7, 'red', particles, width, height);
+const yellow = createParticlesGroup(750, 'yellow', particles, width, height);
+const blue = createParticlesGroup(750, 'blue', particles, width, height);
+const red = createParticlesGroup(750, 'red', particles, width, height);
+const green = createParticlesGroup(750, 'green', particles, width, height);
+
+const model1 = () => {
+    rule(red, red, 0.1, width, height);
+    rule(yellow, red, 0.15, width, height);
+    rule(blue, blue, -0.7, width, height);
+    rule(blue, red, -0.2, width, height);
+    rule(red, blue, -0.1, width, height);
+};
+
+const model2 = () => {
+    rule(green, green, -0.32, width, height);
+    rule(green, red, -0.17, width, height);
+    rule(green, yellow, 0.34, width, height);
+    rule(red, red, -0.1, width, height);
+    rule(red, green, -0.34, width, height);
+    rule(yellow, yellow, 0.15, width, height);
+    rule(yellow, green, -0.2, width, height);
+};
 
 const update = () => {
-    rule(yellow, yellow, -0.5);
-    rule(blue, blue, -0.1);
-
-    // Bounding
-    rule(blue, red, -1);
-    rule(yellow, red, -1);
-
+    model2();
     c.clearRect(0, 0, width, height);
     draw(c, 0, 0, 'black', width, height);
     for (const particle of particles) {
