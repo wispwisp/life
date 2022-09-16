@@ -36,23 +36,21 @@ export const createParticlesGroup = (
 };
 
 const preventLeavingScreen = (particle: any, width: number, height: number) => {
-    {
-        if (particle.x < 0) {
-            particle.x = 0; // Drop position
-            particle.vx *= -1; // Invert speed direction
-        }
-        if (particle.x > width) {
-            particle.x = width;
-            particle.vx *= -1;
-        }
-        if (particle.y < 0) {
-            particle.y = 0;
-            particle.vy *= -1;
-        }
-        if (particle.y >= height) {
-            particle.y = height;
-            particle.vy *= -1;
-        }
+    if (particle.x < 0) {
+        particle.x = 0; // Drop position
+        particle.vx *= -1; // Invert speed direction
+    }
+    if (particle.x > width) {
+        particle.x = width;
+        particle.vx *= -1;
+    }
+    if (particle.y < 0) {
+        particle.y = 0;
+        particle.vy *= -1;
+    }
+    if (particle.y >= height) {
+        particle.y = height;
+        particle.vy *= -1;
     }
 };
 
