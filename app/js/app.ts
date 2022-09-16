@@ -11,6 +11,7 @@ const yellow = createParticlesGroup(750, 'yellow', particles, width, height);
 const blue = createParticlesGroup(750, 'blue', particles, width, height);
 const red = createParticlesGroup(750, 'red', particles, width, height);
 const green = createParticlesGroup(750, 'green', particles, width, height);
+const magenta = createParticlesGroup(750, 'magenta', particles, width, height);
 
 const model1 = () => {
     rule(red, red, 0.1, width, height);
@@ -30,8 +31,25 @@ const model2 = () => {
     rule(yellow, green, -0.2, width, height);
 };
 
+const model3 = () => {
+    rule(green, green, -0.32, width, height);
+    rule(green, red, -0.17, width, height);
+    rule(green, yellow, 0.34, width, height);
+    rule(red, red, -0.1, width, height);
+    rule(red, green, -0.34, width, height);
+    rule(yellow, yellow, 0.15, width, height);
+    rule(yellow, green, -0.2, width, height);
+    rule(blue, yellow, 0.02, width, height);
+    rule(yellow, blue, 0.02, width, height);
+
+    rule(blue, magenta, 0.1, width, height);
+    rule(magenta, blue, -0.5, width, height);
+
+    rule(green, magenta, 0.8, width, height);
+};
+
 const update = () => {
-    model2();
+    model3();
     c.clearRect(0, 0, width, height);
     draw(c, 0, 0, 'black', width, height);
     for (const particle of particles) {
